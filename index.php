@@ -17,10 +17,12 @@
       <div class="row">
         <div class="col-md-3">
           <a href="#">
-            <img src="<?php echo get_theme_mod('procode_header_logo')?>" alt="logo">
+            <img src="<?php echo get_theme_mod('procode_header_logo') ?>" alt="logo">
           </a>
         </div>
-        <div class="col-md-9"></div>
+        <div class="col-md-9">
+        <?php wp_nav_menu(array('theme_location'=> 'main_menu','menu_id'=>'nav') ); ?>
+        </div>
       </div>
     </div>
   </div>
