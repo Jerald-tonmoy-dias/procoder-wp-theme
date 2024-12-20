@@ -1,13 +1,9 @@
 <?php
-/*
-*My theme function
-*/
-
 // theme title
 add_theme_support('title-tag', 'procoder');
 
 
-// theme css and js file calling
+// add css and js file to the theme
 function procode_theme_files()
 
 {
@@ -24,3 +20,30 @@ function procode_theme_files()
 }
 
 add_action('wp_enqueue_scripts', 'procode_theme_files');
+
+
+// theme function
+function procode_customizer_register($wp_customize)
+{
+  // add section
+  $wp_customize->add_section('procode_header_section', array(
+    'title' => __('Header Section', 'procode'),
+    'description' => sprintf(__('If you want to update settings, you can do it from here', 'procode')),
+    // 'priority' => 30
+  ));
+  $wp_customize->add_setting('procode_header_logo', array(
+    // 'default' => get_template_directory_uri() . '/img/logo.png',
+    // 'type' => 'theme_mod'
+    'default' => get_bloginfo('template_directory') . '/img/logo.png',
+  ));
+
+  $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'procode_header_logo', array(
+    'label' => __('Upload Logo', 'procode'),
+    'section' => 'procode_header_section',
+    'settings' => 'procode_header_logo',
+    'priority' => 1
+  )));
+
+}
+
+add_action( 'customize_register', 'procode_customizer_register');
