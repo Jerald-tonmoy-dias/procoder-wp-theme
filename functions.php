@@ -1,4 +1,7 @@
 <?php
+
+error_log('functions.php is working!');
+
 // theme title
 add_theme_support('title-tag', 'procoder');
 
@@ -76,11 +79,53 @@ function procode_customizer_register($wp_customize)
       'left_menu' => 'Left Menu',
       'right_menu' => 'Right Menu',
       'center_menu' => 'Center Menu',
-    )));
+    )
+  ));
 
+  // ----------------- Footer Section -----------------
+  // add section
+  $wp_customize->add_section('procode_footer_option', array(
+    'title' => __('Footer Option', 'procode'),
+    'description' => sprintf(__('If you want to update settings, you can do it from here', 'procode')),
+    // 'priority' => 30
+  ));
+
+  $wp_customize->add_setting('procode_copyright_section', array(
+    'default' => '$copy; Copyright 2024 | Procode',
+    // 'type' => 'theme_mod'
+  ));
+
+  $wp_customize->add_control('procode_menu_position', array(
+    'label' => __('Copryright Text', 'procode'),
+    'description' => 'If you need you can change the copyright text',
+    'setting' => 'procode_copyright_section',
+    'section' => 'procode_footer_option',
+  ));
 }
 
-add_action( 'customize_register', 'procode_customizer_register');
+add_action('customize_register', 'procode_customizer_register');
 
 // menu register 
-register_nav_menu( 'main_menu', __('Main Menu','procodertheme'));
+register_nav_menu('main_menu', __('Main Menu', 'procodertheme'));
+
+
+// walker menu properties
+function procode_nav_description($item_output, $item, $args)
+{
+  // if (!empty($item->description)) {
+  //   $item_output = str_replace($args->link_after . '</a>', '<span class="walker-menu">' . 
+  //   $item->description . '</span>' . $args->link_after . '</a>', $item_output);
+  // }
+
+  // return $item_output; 
+
+  $link_after = (is_object($args) && property_exists($args, 'link_after')) ? $args->link_after : '';
+  $item_output = str_replace(
+    $link_after . '</a>',
+    '<span class="walker-menu">' . $item->description . '</span>' . $link_after . '</a>',
+    $item_output
+  );
+  return $item_output;
+}
+
+add_filter("walker_nav_menu_start_el", 'procode_nav_description', 10, 3);
